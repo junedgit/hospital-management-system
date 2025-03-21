@@ -6,4 +6,8 @@
 }
 *{
     font-family: poppins;
+
+}
+*::-webkit-scrollbar{
+    display: none;
 }
