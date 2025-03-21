@@ -21,26 +21,26 @@ const Menu = () => {
       </div>
       <div className="p-4 space-y-4 border-r-2 border-gray-400 h-full flex flex-col">
         <NavLink
-          to={"new-patient"}
-          className={({ isActive }) => isActive && "font-extrabold text-green-600"} // Will Only Apply NavLink Styles When the pathname matches the string in the "to" prop
+          to={"new-patient-registration"}
+          className={({ isActive }) => isActive && "font-extrabold text-[#0D8E83]"} 
         >
           New Patient Registration
         </NavLink>
         <NavLink
           to={"patient-master"}
-          className={({ isActive }) => isActive && "font-extrabold text-green-600"}
+          className={({ isActive }) => isActive && "font-extrabold text-[#0D8E83]"}
         >
           Patient Master
         </NavLink>
         <NavLink
           to={"services"}
-          className={({ isActive }) => isActive && "font-extrabold text-green-600"}
+          className={({ isActive }) => isActive && "font-extrabold text-[#0D8E83]"}
         >
           Services
         </NavLink>
         <NavLink
           to={"referral"}
-          className={({ isActive }) => isActive && "font-extrabold text-green-600"}
+          className={({ isActive }) => isActive && "font-extrabold text-[#0D8E83]"}
         >
           Referals
         </NavLink>
@@ -51,6 +51,3 @@ const Menu = () => {
 
 export default Menu;
 
-{
-  /* <li className='active:text-[#0D8E83] active:font-semibold'> */
-}

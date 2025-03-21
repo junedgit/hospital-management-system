@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ReferralForm from "../Components/ReferralForm";
+import ReferralForm from "../../../Components/ReferralForm";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
-const EditReferal = () => {
+const EditReferral = () => {
   const navigate = useNavigate();
   const notify = () =>
     toast.success("Referral Edited!", {
@@ -62,4 +62,4 @@ const EditReferal = () => {
   );
 };
 
-export default EditReferal;
+export default EditReferral;

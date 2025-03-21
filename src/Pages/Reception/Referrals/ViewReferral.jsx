@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import ViewReferralData from '../Components/ViewReferralData'
+import ViewReferralData from '../../../Components/ViewReferralData'
 
 const ViewReferral = () => {
   return (

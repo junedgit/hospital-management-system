@@ -1,4 +1,4 @@
-import ReferralForm from '../Components/ReferralForm'
+import ReferralForm from '../../../Components/ReferralForm'
 import { Link } from 'react-router-dom'
 
 const AddReferral = () => {
