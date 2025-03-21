@@ -23,7 +23,7 @@ const Menu = () => {
         <NavLink
           to={"/"}
           className={(isActive) =>
-            "nav-link" + (!isActive ? " unselected" : "")
+            "nav-link" + (!isActive ? " unselected" : "text-red-900")
           }
         >
           New Patient Registration
