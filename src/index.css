@@ -11,3 +11,7 @@
 *::-webkit-scrollbar{
     display: none;
 }
+.custom-date::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }

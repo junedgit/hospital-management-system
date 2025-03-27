@@ -8,6 +8,9 @@ import Layout from "./Components/Layout"
 import PatientMaster from "./Pages/Reception/PatientMaster/PatientMaster"
 import NewPatientRegistration from "./Pages/Reception/NewPatientRegistration/NewPatientRegistration"
 import Service from "./Pages/Reception/Services/service"
+import PatientRecord from "./Pages/Reception/PatientMaster/PatientRecord"
+import BookAppoinment from "./Pages/Reception/PatientMaster/BookAppoinment"
+import AdmitPatient from "./Pages/Reception/PatientMaster/AdmitPatient"
 
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -17,8 +20,13 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="add-referral" element={<AddReferral />} />
     <Route path="view-referral" element={<ViewReferral />} />
     <Route path="edit-referral" element={<EditReferral />} />
-    <Route path="new-patient-registration" element={<NewPatientRegistration />} />
+    <Route index path="new-patient-registration" element={<NewPatientRegistration />} />
     <Route path="patient-master" element={<PatientMaster/>} />
+    <Route path="patient-record" element={<PatientRecord/>} />
+    <Route path="book-appoinment" element={<BookAppoinment/>} />
+    <Route path="admit-patient" element={<AdmitPatient/>} />
+
+
     <Route path="services" element={<Service/>} />
     
   </Route>
