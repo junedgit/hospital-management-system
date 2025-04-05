@@ -11,6 +11,14 @@ import Service from "./Pages/Reception/Services/service"
 import PatientRecord from "./Pages/Reception/PatientMaster/PatientRecord"
 import BookAppoinment from "./Pages/Reception/PatientMaster/BookAppoinment"
 import AdmitPatient from "./Pages/Reception/PatientMaster/AdmitPatient"
+import OPQueue from "./Pages/Doctor/OP Queue/OPQueue"
+import IPDashboard from "./Pages/Doctor/IP Dashboard/IPDashboard"
+import MedicalForm from "./Pages/Doctor/OP Queue/MedicalForm"
+import OpAssessment from "./Pages/Nurse/OpAssessment"
+import IpCareManagement from "./Pages/Nurse/IpCareManagement"
+import AdmissionNotes from "./Pages/Nurse/AdmissionNotes"
+import AdmissionNotePatient from "./Pages/Nurse/AdmissionNotePatient"
+import { MenuProvider } from "./Context/MenuProvider"
 
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -25,15 +33,24 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="patient-record" element={<PatientRecord/>} />
     <Route path="book-appoinment" element={<BookAppoinment/>} />
     <Route path="admit-patient" element={<AdmitPatient/>} />
-
-
     <Route path="services" element={<Service/>} />
-    
+    <Route path="op-queue" element={<OPQueue/>} />
+    <Route path="patient-record-medicalform" element={<MedicalForm/>} />
+    <Route path="ip-dashboard" element={<IPDashboard/>} />
+    <Route path="op-assessment" element={<OpAssessment/>}/>
+    <Route path="ip-care-management" element={<IpCareManagement/>}/>
+    <Route path="admission-note" element={<AdmissionNotes/>}/>
+    <Route path="admission-note-patient" element={<AdmissionNotePatient/>}/>
+
+    <Route path="*" element={<div>Page not found</div>} />
   </Route>
 ))
 function App() {
   return (
-    <RouterProvider router={router} />
+    <MenuProvider>
+   <RouterProvider router={router} />
+    </MenuProvider>
+    
   )
 }
 
