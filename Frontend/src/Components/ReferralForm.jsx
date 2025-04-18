@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import { addReferral } from '../api/receptionService';
+import { useNavigate } from 'react-router-dom';
 
-const ReferralForm = () => {
+const ReferralForm = ({ id = 'referral-form', onSubmitSuccess }) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
@@ -23,18 +28,78 @@ const ReferralForm = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.referralType || !formData.referralCode || !formData.address || !formData.phone) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    // Validate email format if provided
+    if (formData.email && !/^\S+@\S+\.\S+$/.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    // Validate phone number format
+    if (!/^\d{10}$/.test(formData.phone)) {
+      setError('Please enter a valid 10-digit phone number');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Prepare data for API
+      const referralData = {
+        name: `${formData.firstName} ${formData.middleName ? formData.middleName + ' ' : ''}${formData.lastName}`,
+        referralType: formData.referralType,
+        referralCode: formData.referralCode,
+        speciality: formData.speciality || '',
+        qualification: formData.qualification || '',
+        hospitalName: formData.hospitalName || '',
+        address: formData.address,
+        city: formData.city || '',
+        state: formData.state || '',
+        pinCode: formData.pinCode || '',
+        email: formData.email || '',
+        phone: formData.phone
+      };
+
+      // Call API to add referral
+      const response = await addReferral(referralData);
+      console.log('Referral added successfully:', response);
+
+      // Call onSubmitSuccess callback if provided
+      if (onSubmitSuccess) {
+        onSubmitSuccess(response);
+      } else {
+        // Fallback to navigate
+        navigate('/referral');
+      }
+    } catch (err) {
+      console.error('Error adding referral:', err);
+      setError(err.message || 'Failed to add referral. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="max-w-7xl w-full mx-auto">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+          <span className="block sm:inline">{error}</span>
+        </div>
+      )}
+      <form id={id} onSubmit={handleSubmit} className="space-y-6" disabled={loading}>
+
         <div className="border border-[#D0D5DD] rounded-lg p-4 bg-white shadow-sm">
           <h2 className="text-gray-700 font-medium uppercase text-sm mb-4">Referral Details</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-1">
               <label className="block text-sm">
@@ -50,7 +115,7 @@ const ReferralForm = () => {
                 required
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">Middle name</label>
               <input
@@ -62,7 +127,7 @@ const ReferralForm = () => {
                 className="w-full border border-[#D0D5DD] bg-[#F7F9FC] rounded p-2 text-sm"
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">
                 Last name <span className="text-red-500">*</span>
@@ -77,7 +142,7 @@ const ReferralForm = () => {
                 required
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">
                 Referral type <span className="text-red-500">*</span>
@@ -88,7 +153,7 @@ const ReferralForm = () => {
                 onChange={handleChange}
                 className="w-full border border-[#D0D5DD] bg-[#F7F9FC] rounded p-2 text-sm"
                 required
-                
+
               >
                 <option value="">Select</option>
                 <option value="Referral type 1">Referral tpe 1</option>
@@ -96,7 +161,7 @@ const ReferralForm = () => {
                 <option value="Referral type 3">Referral type 3</option>
               </select>
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">
                 Referral code <span className="text-red-500">*</span>
@@ -111,7 +176,7 @@ const ReferralForm = () => {
                 required
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">Speciality</label>
               <select
@@ -127,7 +192,7 @@ const ReferralForm = () => {
                 <option value="Pediatrics">Pediatrics</option>
               </select>
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">Qualification</label>
               <input
@@ -139,7 +204,7 @@ const ReferralForm = () => {
                 className="w-full border border-[#D0D5DD] bg-[#F7F9FC] rounded p-2 text-sm"
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">Hospital/clinic name</label>
               <input
@@ -155,7 +220,7 @@ const ReferralForm = () => {
         </div>
         <div className="border border-[#D0D5DD] rounded-lg p-4 bg-white shadow-sm">
           <h2 className="text-gray-700 font-medium uppercase text-sm mb-4">Contact Details</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="lg:col-span-2 space-y-1">
               <label className="block text-sm">
@@ -171,7 +236,7 @@ const ReferralForm = () => {
                 required
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">City</label>
               <input
@@ -183,7 +248,7 @@ const ReferralForm = () => {
                 className="w-full border border-[#D0D5DD] bg-[#F7F9FC] rounded p-2 text-sm"
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">State</label>
               <select
@@ -198,7 +263,7 @@ const ReferralForm = () => {
                 <option value="Delhi">Delhi</option>
               </select>
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">Pin code</label>
               <input
@@ -210,7 +275,7 @@ const ReferralForm = () => {
                 className="w-full border border-[#D0D5DD] bg-[#F7F9FC] rounded p-2 text-sm"
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">Email</label>
               <input
@@ -222,7 +287,7 @@ const ReferralForm = () => {
                 className="w-full border border-[#D0D5DD] bg-[#F7F9FC] rounded p-2 text-sm"
               />
             </div>
-            
+
             <div className="space-y-1">
               <label className="block text-sm">
                 Phone <span className="text-red-500">*</span>

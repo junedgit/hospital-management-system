@@ -19,43 +19,73 @@ import IpCareManagement from "./Pages/Nurse/IpCareManagement"
 import AdmissionNotes from "./Pages/Nurse/AdmissionNotes"
 import AdmissionNotePatient from "./Pages/Nurse/AdmissionNotePatient"
 import { MenuProvider } from "./Context/MenuProvider"
+import { AuthProvider } from "./Context/AuthContext"
 import TestParameterMaster from "./Pages/Lab/Test Parameters/TestParameterMaster"
 import AddParameters from "./Pages/Lab/Test Parameters/AddParameters"
+import Login from "./Pages/Login/Login"
+import Unauthorized from "./Pages/Unauthorized/Unauthorized"
+import NotFound from "./Pages/NotFound/NotFound"
+import ProtectedRoute from "./Components/ProtectedRoute"
+
 
 
 const router = createBrowserRouter(createRoutesFromElements(
-  <Route path="/" element={<Layout />}>
-    <Route path="referral" element={<Referral />} />
-    <Route path="referral-fill" element={<ReferralFill />} />
-    <Route path="add-referral" element={<AddReferral />} />
-    <Route path="view-referral" element={<ViewReferral />} />
-    <Route path="edit-referral" element={<EditReferral />} />
-    <Route index path="new-patient-registration" element={<NewPatientRegistration />} />
-    <Route path="patient-master" element={<PatientMaster/>} />
-    <Route path="patient-record" element={<PatientRecord/>} />
-    <Route path="book-appoinment" element={<BookAppoinment/>} />
-    <Route path="admit-patient" element={<AdmitPatient/>} />
-    <Route path="services" element={<Service/>} />
-    <Route path="op-queue" element={<OPQueue/>} />
-    <Route path="patient-record-medicalform" element={<MedicalForm/>} />
-    <Route path="ip-dashboard" element={<IPDashboard/>} />
-    <Route path="op-assessment" element={<OpAssessment/>}/>
-    <Route path="ip-care-management" element={<IpCareManagement/>}/>
-    <Route path="admission-note" element={<AdmissionNotes/>}/>
-    <Route path="admission-note-patient" element={<AdmissionNotePatient/>}/>
-    <Route path="test-parameters-master" element={<TestParameterMaster/>}/>
-    <Route path="add-parameter" element={<AddParameters/>}/>
+  <Route>
+    {/* Public routes */}
+    <Route path="/login" element={<Login />} />
+    <Route path="/unauthorized" element={<Unauthorized />} />
 
+    {/* Protected routes with Layout */}
+    <Route path="/" element={<Layout />}>
+      {/* Reception routes - require 'reception' role */}
+      <Route element={<ProtectedRoute requiredRoles={['reception', 'clinicAdmin']} />}>
+        <Route path="referral" element={<Referral />} />
+        <Route path="referral-fill" element={<ReferralFill />} />
+        <Route path="add-referral" element={<AddReferral />} />
+        <Route path="view-referral" element={<ViewReferral />} />
+        <Route path="edit-referral" element={<EditReferral />} />
+        <Route index path="new-patient-registration" element={<NewPatientRegistration />} />
+        <Route path="patient-master" element={<PatientMaster/>} />
+        <Route path="patient-record" element={<PatientRecord/>} />
+        <Route path="book-appoinment" element={<BookAppoinment/>} />
+        <Route path="admit-patient" element={<AdmitPatient/>} />
+        <Route path="services" element={<Service/>} />
+      </Route>
 
-    <Route path="*" element={<div>Page not found</div>} />
+      {/* Doctor routes - require 'doctor' role */}
+      <Route element={<ProtectedRoute requiredRoles={['doctor', 'clinicAdmin']} />}>
+        <Route path="op-queue" element={<OPQueue/>} />
+        <Route path="patient-record-medicalform" element={<MedicalForm/>} />
+        <Route path="ip-dashboard" element={<IPDashboard/>} />
+      </Route>
+
+      {/* Nurse routes - require 'nurse' role */}
+      <Route element={<ProtectedRoute requiredRoles={['nurse', 'clinicAdmin']} />}>
+        <Route path="op-assessment" element={<OpAssessment/>}/>
+        <Route path="ip-care-management" element={<IpCareManagement/>}/>
+        <Route path="admission-note" element={<AdmissionNotes/>}/>
+        <Route path="admission-note-patient" element={<AdmissionNotePatient/>}/>
+      </Route>
+
+      {/* Lab routes - require 'lab' role */}
+      <Route element={<ProtectedRoute requiredRoles={['lab', 'clinicAdmin']} />}>
+        <Route path="test-parameters-master" element={<TestParameterMaster/>}/>
+        <Route path="add-parameter" element={<AddParameters/>}/>
+      </Route>
+
+      {/* Catch-all route */}
+      <Route path="*" element={<NotFound />} />
+    </Route>
   </Route>
 ))
+
 function App() {
   return (
-    <MenuProvider>
-   <RouterProvider router={router} />
-    </MenuProvider>
-    
+    <AuthProvider>
+      <MenuProvider>
+        <RouterProvider router={router} />
+      </MenuProvider>
+    </AuthProvider>
   )
 }
 

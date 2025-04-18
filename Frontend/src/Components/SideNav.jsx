@@ -1,9 +1,17 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useMenu } from "../Context/MenuProvider";
+import { useAuth } from "../Context/AuthContext";
 import Menu from "./Menu";
 
 const SideNav = () => {
   const { toggleMenu } = useMenu();
+  const { userRole, hasRole, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="flex h-full">
@@ -19,144 +27,175 @@ const SideNav = () => {
               <img
                 className="w-12 h-10 object-cover"
                 src="/images/logo.svg"
-                alt=""
+                alt="Hospital Logo"
               />
             </NavLink>
           </div>
           <div className="flex flex-col items-center gap-4">
-            <NavLink
-            to={""}
-            onClick={() => toggleMenu("")}
-            className={({ isActive }) =>
-              isActive && "font-extrabold text-[#0D8E83]"
-            }
-            >
-            <img
-              className="w-8 h-8 object-cover"
-              src="images/sheild.svg"
-              alt=""
-            />
-            </NavLink>
-            <NavLink
-              to={"new-patient-registration"}
-              onClick={() => toggleMenu("reception")}
-              className={({ isActive }) =>
-                isActive && "font-extrabold text-[#0D8E83]"
-              }
-            >
-              <img
-                className="w-8 h-8 object-cover"
-                src="images/person-add.svg"
-                alt=""
-              />
-            </NavLink>
-            <NavLink
-              to={"op-queue"}
-              onClick={() => toggleMenu("doctors")}
-              className={({ isActive }) =>
-                isActive && "font-extrabold text-[#0D8E83]"
-              }
-            >
-              <img
-                className="w-8 h-8 object-cover"
-                src="images/stethoscope.svg"
-                alt=""
-              />
-            </NavLink>
-            <NavLink
-              to={"/test-parameters-master"}
-              onClick={() => toggleMenu("lab")}
-              className={({ isActive }) =>
-                isActive && "font-extrabold text-[#0D8E83]"
-              }
-            >
-              <img
-                className="w-8 h-8 object-cover"
-                src="images/biotech.svg"
-                alt=""
-              />
-            </NavLink>
-            <NavLink
-              to={"/"}
-              onClick={() => toggleMenu("")}
-              className={({ isActive }) =>
-                isActive && "font-extrabold text-[#0D8E83]"
-              }
-            >
-              <img
-                className="w-8 h-8 object-cover"
-                src="images/home_storage.svg"
-                alt=""
-              />
-            </NavLink>
+            {/* Admin Icon - visible to all */}
             <NavLink
               to={""}
               onClick={() => toggleMenu("")}
               className={({ isActive }) =>
-                isActive && "font-extrabold text-[#0D8E83]"
+                isActive ? "font-extrabold text-[#0D8E83]" : ""
               }
             >
               <img
                 className="w-8 h-8 object-cover"
-                src="images/cap.svg"
-                alt=""
+                src="images/sheild.svg"
+                alt="Admin"
               />
             </NavLink>
-            <NavLink
-              to={"op-assessment"}
-              onClick={() => toggleMenu("nurse")}
-              className={({ isActive }) =>
-                isActive && "font-extrabold text-[#0D8E83]"
-              }
-            >
-              <img
-                className="w-7 h-7 object-cover"
-                src="images/nurse.svg"
-                alt=""
-              />
-            </NavLink>
+
+            {/* Reception Icon - visible to reception and clinicAdmin */}
+            {hasRole(['reception', 'clinicAdmin']) && (
+              <NavLink
+                to={"new-patient-registration"}
+                onClick={() => toggleMenu("reception")}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold text-[#0D8E83]" : ""
+                }
+              >
+                <img
+                  className="w-8 h-8 object-cover"
+                  src="images/person-add.svg"
+                  alt="Reception"
+                />
+              </NavLink>
+            )}
+
+            {/* Doctor Icon - visible to doctor and clinicAdmin */}
+            {hasRole(['doctor', 'clinicAdmin']) && (
+              <NavLink
+                to={"op-queue"}
+                onClick={() => toggleMenu("doctors")}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold text-[#0D8E83]" : ""
+                }
+              >
+                <img
+                  className="w-8 h-8 object-cover"
+                  src="images/stethoscope.svg"
+                  alt="Doctor"
+                />
+              </NavLink>
+            )}
+
+            {/* Lab Icon - visible to lab and clinicAdmin */}
+            {hasRole(['lab', 'clinicAdmin']) && (
+              <NavLink
+                to={"/test-parameters-master"}
+                onClick={() => toggleMenu("lab")}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold text-[#0D8E83]" : ""
+                }
+              >
+                <img
+                  className="w-8 h-8 object-cover"
+                  src="images/biotech.svg"
+                  alt="Lab"
+                />
+              </NavLink>
+            )}
+
+            {/* Inventory Icon - visible to inventory and clinicAdmin */}
+            {hasRole(['inventory', 'clinicAdmin']) && (
+              <NavLink
+                to={"/"}
+                onClick={() => toggleMenu("")}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold text-[#0D8E83]" : ""
+                }
+              >
+                <img
+                  className="w-8 h-8 object-cover"
+                  src="images/home_storage.svg"
+                  alt="Inventory"
+                />
+              </NavLink>
+            )}
+
+            {/* Pharmacy Icon - visible to pharmacy and clinicAdmin */}
+            {hasRole(['pharmacy', 'clinicAdmin']) && (
+              <NavLink
+                to={""}
+                onClick={() => toggleMenu("")}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold text-[#0D8E83]" : ""
+                }
+              >
+                <img
+                  className="w-8 h-8 object-cover"
+                  src="images/cap.svg"
+                  alt="Pharmacy"
+                />
+              </NavLink>
+            )}
+
+            {/* Nurse Icon - visible to nurse and clinicAdmin */}
+            {hasRole(['nurse', 'clinicAdmin']) && (
+              <NavLink
+                to={"op-assessment"}
+                onClick={() => toggleMenu("nurse")}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold text-[#0D8E83]" : ""
+                }
+              >
+                <img
+                  className="w-7 h-7 object-cover"
+                  src="images/nurse.svg"
+                  alt="Nurse"
+                />
+              </NavLink>
+            )}
+
+            {/* Billing Icon - visible to billing and clinicAdmin */}
+            {hasRole(['billing', 'clinicAdmin']) && (
+              <NavLink
+                to={"/"}
+                onClick={() => toggleMenu("")}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold text-[#0D8E83]" : ""
+                }
+              >
+                <img
+                  className="w-8 h-8 object-cover"
+                  src="images/receipt.svg"
+                  alt="Billing"
+                />
+              </NavLink>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col items-center mb-6 gap-4 cursor-pointer">
+          {/* Settings - visible to clinicAdmin only */}
+          {hasRole(['clinicAdmin']) && (
             <NavLink
               to={"/"}
               onClick={() => toggleMenu("")}
               className={({ isActive }) =>
-                isActive && "font-extrabold text-[#0D8E83]"
+                isActive ? "font-extrabold text-[#0D8E83]" : ""
               }
             >
               <img
                 className="w-8 h-8 object-cover"
-                src="images/receipt.svg"
-                alt=""
+                src="/images/settings.svg"
+                alt="Settings"
               />
             </NavLink>
-          </div>
-        </div>
-        <div className="flex flex-col items-center mb-6 gap-4 cursor-pointer">
-          <NavLink
-            to={"/"}
-            onClick={() => toggleMenu("")}
-            className={({ isActive }) =>
-              isActive && "font-extrabold text-[#0D8E83]"
-            }
-          >
-            <img
-              className="w-8 h-8 object-cover"
-              src="/images/settings.svg"
-              alt=""
-            />
-          </NavLink>
-          <NavLink
-            to={"/"}
-            onClick={() => toggleMenu("")}
-            className={({ isActive }) =>
-              isActive && "font-extrabold text-[#0D8E83]"
-            }
+          )}
+
+          {/* Logout button */}
+          <button
+            onClick={handleLogout}
+            className="focus:outline-none"
           >
             <img
               className="w-8 h-8 object-cover"
               src="/images/log-out.svg"
-              alt=""
+              alt="Logout"
             />
-          </NavLink>
+          </button>
         </div>
       </div>
       <Menu />
