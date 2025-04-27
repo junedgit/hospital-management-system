@@ -1,5 +1,5 @@
 import express from "express";
-import { getOtherAppointments, getTodaysAppointments, saveAndPrint } from "../../../controllers/doctor/OPQueue/opQueue.controller.js";
+import { getOtherAppointments, getTodaysAppointments, saveAndPrint } from "../../../controllers/doctor/opQueue/opQueue.controller.js";
 import { authenticateUser, authorizeRoles } from "../../../middlewares/authMiddleware.js";
 
 const opQueueRouter = express.Router();

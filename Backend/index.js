@@ -23,7 +23,8 @@ import manufacturerRouter from "./routes/inventory/manufacturer_data/manufacture
 import supplierRouter from "./routes/inventory/supplier_data/supplier.route.js";
 import drugRouter from "./routes/inventory/drug/drug.route.js";
 import stockEntryRouter from "./routes/inventory/stockEntry/stockEntry.route.js";
-import opQueueRouter from "./routes/doctor/OPQueue/opQueue.route.js";
+import opQueueRouter from "./routes/doctor/opQueue/opQueue.route.js";
+
 import consultationPrintRouter from "./routes/clinicAdmin/masterDataConfig/printSettings/consultationPrint/consultationPrint.route.js";
 import pharmacyBillRouter from "./routes/clinicAdmin/masterDataConfig/printSettings/pharmacyBill/pharmacyBill.route.js";
 import billReceiptRouter from "./routes/clinicAdmin/masterDataConfig/printSettings/billReceipt/billReceipt.route.js";
@@ -53,26 +54,44 @@ app.use("/api/clinicAdmin/masterDataConfig/tariff", tariffRouter);
 app.use("/api/clinicAdmin/masterDataConfig/template", templateRouter);
 app.use("/api/clinicAdmin/masterDataConfig/ward", wardRouter);
 app.use("/api/clinicAdmin/masterDataConfig/room", roomRouter);
-app.use("/api/clinicAdmin/masterDataConfig/print-settings/consultation-print", consultationPrintRouter)
-app.use("/api/clinicAdmin/masterDataConfig/print-settings/pharmacy-bill", pharmacyBillRouter)
-app.use("/api/clinicAdmin/masterDataConfig/print-settings/bill-receipt", billReceiptRouter);
-app.use("/api/clinicAdmin/masterDataConfig/print-settings/doctor-prescription", doctorPrescriptionRouter );
-app.use("/api/clinicAdmin/masterDataConfig/print-settings/lab-report", labReportRouter);
+app.use(
+  "/api/clinicAdmin/masterDataConfig/print-settings/consultation-print",
+  consultationPrintRouter
+);
+app.use(
+  "/api/clinicAdmin/masterDataConfig/print-settings/pharmacy-bill",
+  pharmacyBillRouter
+);
+app.use(
+  "/api/clinicAdmin/masterDataConfig/print-settings/bill-receipt",
+  billReceiptRouter
+);
+app.use(
+  "/api/clinicAdmin/masterDataConfig/print-settings/doctor-prescription",
+  doctorPrescriptionRouter
+);
+app.use(
+  "/api/clinicAdmin/masterDataConfig/print-settings/lab-report",
+  labReportRouter
+);
 app.use("/api/login", loginRouter);
 app.use("/api/receptionist/referral", referralRouter);
 app.use("/api/receptionist/patient", newPatientRouter);
 app.use("/api/receptionist/patientMaster/admit", patientAdmitRouter);
-app.use("/api/receptionist/patientMaster/appointment",patientAppointmentRouter);
-app.use("/api/receptionist/service",patientServiceRouter)
+app.use(
+  "/api/receptionist/patientMaster/appointment",
+  patientAppointmentRouter
+);
+app.use("/api/receptionist/service", patientServiceRouter);
 app.use("/api/inventory/manufacturer", manufacturerRouter);
-app.use("/api/inventory/supplier",supplierRouter)
-app.use("/api/inventory/drug", drugRouter)
-app.use("/api/inventory/stock-entry", stockEntryRouter)
-app.use("/api/inventory/stock-adjustment", stockAdjustmentRouter)
-app.use("/api/inventory/stock-migration", stockMigrationRouter)
-app.use("/api/doctor/op-queue", opQueueRouter)
+app.use("/api/inventory/supplier", supplierRouter);
+app.use("/api/inventory/drug", drugRouter);
+app.use("/api/inventory/stock-entry", stockEntryRouter);
+app.use("/api/inventory/stock-adjustment", stockAdjustmentRouter);
+app.use("/api/inventory/stock-migration", stockMigrationRouter);
+app.use("/api/doctor/op-queue", opQueueRouter);
 app.use("/api/billing/appointment-bill", appointmentBillRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
